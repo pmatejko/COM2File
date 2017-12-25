@@ -90,7 +90,7 @@ void main(int argc, char * argv[]) {
 
     if (argc != 3) {
         printf("Use program like this:\n"
-                       "serial-analysis <name-of-com-port> <name-of-results-file>\n");
+                       "COM2File <name-of-com-port> <name-of-results-file>\n");
         exit(EXIT_SUCCESS);
     } else {
         comPortName = argv[1];
