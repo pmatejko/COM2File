@@ -2,9 +2,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-noreturn"
-
 #define BUFFER_SIZE 1025
 #define READING_LENGTH 2
 
@@ -76,6 +73,8 @@ void setNewCOMMask() {
     }
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
 void com2FileLoop() {
     char buffer[BUFFER_SIZE] = {};
     char * reading;
@@ -95,8 +94,8 @@ void com2FileLoop() {
 
                     if (bytesWritten >= READING_LENGTH) {
                         time_t currentEpoch = time(NULL);
-                        size_t timeStringSize = (size_t) snprintf(NULL, 0, "%ld", currentEpoch);
-                        char timeString[timeStringSize + 2];
+                        size_t timeStringSize = (size_t) (snprintf(NULL, 0, "%ld", currentEpoch) + 2);
+                        char timeString[timeStringSize];
                         snprintf(timeString, timeStringSize, ",%ld\n", currentEpoch);
 
                         WriteFile(resultsFileHandle, timeString, sizeof(char) * timeStringSize, &bytesWritten, NULL);
@@ -108,6 +107,7 @@ void com2FileLoop() {
         }
     }
 }
+#pragma clang diagnostic pop
 
 
 void main(int argc, char * argv[]) {
@@ -135,6 +135,3 @@ void main(int argc, char * argv[]) {
     printf("\nStarted listening for data\n");
     com2FileLoop();
 }
-
-
-#pragma clang diagnostic pop
