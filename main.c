@@ -76,37 +76,13 @@ void setNewCOMMask() {
     }
 }
 
-
-void main(int argc, char * argv[]) {
-    char * comPortName;
-    char * resultsFileName;
-
-    DWORD awakingEvent;
-    char * reading;
-    const char * comma = ",";
+void com2FileLoop() {
     char buffer[BUFFER_SIZE] = {};
+    char * reading;
     DWORD bytesRead;
     DWORD bytesWritten;
+    DWORD awakingEvent;
 
-    if (argc != 3) {
-        printf("Use program like this:\n"
-                       "COM2File <name-of-com-port> <name-of-results-file>\n");
-        exit(EXIT_SUCCESS);
-    } else {
-        comPortName = argv[1];
-        resultsFileName = argv[2];
-    }
-
-    setCOMPortHandle(comPortName);
-    setResultsFileHandle(resultsFileName);
-
-    atexit(safeExit);
-
-    setNewCOMState();
-    setNewCOMTimeouts();
-    setNewCOMMask();
-
-    printf("\nStarted listening for data\n");
     for (;;) {
         if (WaitCommEvent(comPortHandle, &awakingEvent, NULL) != FALSE) {
             do {
@@ -131,6 +107,33 @@ void main(int argc, char * argv[]) {
             } while (bytesRead > 0);
         }
     }
+}
+
+
+void main(int argc, char * argv[]) {
+    char * comPortName;
+    char * resultsFileName;
+
+    if (argc != 3) {
+        printf("Use program like this:\n"
+                       "com2file <name_of_com_port> <name_of_results_file>\n");
+        exit(EXIT_SUCCESS);
+    } else {
+        comPortName = argv[1];
+        resultsFileName = argv[2];
+    }
+
+    setCOMPortHandle(comPortName);
+    setResultsFileHandle(resultsFileName);
+
+    atexit(safeExit);
+
+    setNewCOMState();
+    setNewCOMTimeouts();
+    setNewCOMMask();
+
+    printf("\nStarted listening for data\n");
+    com2FileLoop();
 }
 
 
