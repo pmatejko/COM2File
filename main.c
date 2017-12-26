@@ -94,11 +94,11 @@ void com2FileLoop() {
 
                     if (bytesWritten >= READING_LENGTH) {
                         time_t currentEpoch = time(NULL);
-                        size_t timeStringSize = (size_t) (snprintf(NULL, 0, "%ld", currentEpoch) + 2);
+                        size_t timeStringSize = (size_t) (snprintf(NULL, 0, "%ld", currentEpoch) + 3); // ',' '\n' '\0'
                         char timeString[timeStringSize];
                         snprintf(timeString, timeStringSize, ",%ld\n", currentEpoch);
 
-                        WriteFile(resultsFileHandle, timeString, sizeof(char) * timeStringSize, &bytesWritten, NULL);
+                        WriteFile(resultsFileHandle, timeString, sizeof(char) * (timeStringSize - 1), &bytesWritten, NULL);
                     }
 
                     reading = strtok(NULL, "\n");
