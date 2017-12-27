@@ -93,7 +93,7 @@ void com2FileLoop() {
 
                     time_t currentEpoch = time(NULL);
                     size_t timeStringSize = (size_t) (snprintf(NULL, 0, "%ld", currentEpoch) + 3); // ',' '\n' '\0'
-                    char timeString[timeStringSize] = {};
+                    char timeString[timeStringSize];
                     snprintf(timeString, timeStringSize, ",%ld\n", currentEpoch);
 
                     WriteFile(resultsFileHandle, timeString, sizeof(char) * (timeStringSize - 1), &bytesWritten, NULL);
