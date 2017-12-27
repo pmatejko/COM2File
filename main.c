@@ -3,7 +3,6 @@
 #include <time.h>
 
 #define BUFFER_SIZE 1025
-#define READING_LENGTH 2
 
 HANDLE comPortHandle;
 HANDLE resultsFileHandle;
@@ -92,14 +91,12 @@ void com2FileLoop() {
                 while (reading != NULL) {
                     WriteFile(resultsFileHandle, reading, sizeof(char) * strlen(reading), &bytesWritten, NULL);
 
-                    if (bytesWritten >= READING_LENGTH) {
-                        time_t currentEpoch = time(NULL);
-                        size_t timeStringSize = (size_t) (snprintf(NULL, 0, "%ld", currentEpoch) + 3); // ',' '\n' '\0'
-                        char timeString[timeStringSize];
-                        snprintf(timeString, timeStringSize, ",%ld\n", currentEpoch);
+                    time_t currentEpoch = time(NULL);
+                    size_t timeStringSize = (size_t) (snprintf(NULL, 0, "%ld", currentEpoch) + 3); // ',' '\n' '\0'
+                    char timeString[timeStringSize] = {};
+                    snprintf(timeString, timeStringSize, ",%ld\n", currentEpoch);
 
-                        WriteFile(resultsFileHandle, timeString, sizeof(char) * (timeStringSize - 1), &bytesWritten, NULL);
-                    }
+                    WriteFile(resultsFileHandle, timeString, sizeof(char) * (timeStringSize - 1), &bytesWritten, NULL);
 
                     reading = strtok(NULL, "\n");
                 }
